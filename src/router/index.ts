@@ -5,8 +5,26 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: () => import('../pages/HelloWorld.vue'), // Lazy load route component,
+      name: 'userLayout',
+      component: () => import('../layout/layout.vue'), // Lazy load route component,
+      children: [
+        {
+          path: '/inventario',
+          name: 'Inventario',
+          component: () => import('../pages/Inventory/inventoryPage.vue'), // Lazy load route component,
+          meta: {
+            authorizedRoles: ['Administrador'],
+          },
+        },
+        {
+          path: '/usuarios',
+          name: 'Usuarios',
+          component: () => import('../pages/Users/usersPage.vue'), // Lazy load route component,
+          meta: {
+            authorizedRoles: ['Administrador'],
+          },
+        },
+      ],
     },
   ],
 });
