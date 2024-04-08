@@ -1,9 +1,7 @@
-<div style="display: flex; justify-content: center; margin-top: 3rem "> 
-<img src="https://seeklogo.com/images/N/ngk-insulators-logo-4AED23FB89-seeklogo.com.png"  alt="NGKLogo">
-</div>
+
   
 <div style="display: flex; margin-top:3rem; margin-left: 4rem; gap:2rem; place-content: center; align-items: center">
-  <img src="https://seeklogo.com/images/V/vite-logo-BFD4283991-seeklogo.com.png" style=" height: 3.5rem;" alt="viteLogo">
+
   <img src="https://seeklogo.com/images/V/vuejs-logo-17D586B587-seeklogo.com.png" style=" height: 3rem;" alt="vueLogo">
   <img src="https://seeklogo.com/images/T/tailwind-css-logo-5AD4175897-seeklogo.com.png" style=" height: 3rem;" alt="tailwindLogo">
 </div>
