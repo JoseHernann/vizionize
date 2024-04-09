@@ -16,14 +16,7 @@ const router = createRouter({
             authorizedRoles: ['Administrador'],
           },
         },
-        {
-          path: '/usuarios',
-          name: 'Usuarios',
-          component: () => import('../pages/Users/usersPage.vue'), // Lazy load route component,
-          meta: {
-            authorizedRoles: ['Administrador'],
-          },
-        },
+
         {
           path: '/agregar-productos',
           name: 'Agregar Articulo',
@@ -44,6 +37,14 @@ const router = createRouter({
           path: '/editar-productos',
           name: 'Editar Articulo',
           component: () => import('../pages/Articulos/editProducts.vue'),
+          meta: {
+            authorizedRoles: ['Administrador'],
+          },
+        },
+        {
+          path: '/usuarios',
+          name: 'Usuarios',
+          component: () => import('../pages/Users/usersPage.vue'), // Lazy load route component,
           meta: {
             authorizedRoles: ['Administrador'],
           },

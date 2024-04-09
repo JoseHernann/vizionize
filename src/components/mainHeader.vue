@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import logo from '../assets/logo.vue';
+  import logo from '../assets/logoImage.vue';
 </script>
 <template>
   <nav class="flex justify-between items-center fixed bg-white w-screen left-0 top-0 px-5 pt-2">

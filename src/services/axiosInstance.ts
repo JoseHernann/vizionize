@@ -1,15 +1,11 @@
 import axios from 'axios';
-
+const protocol = typeof window !== 'undefined' ? window.location.protocol : 'https:';
 const instance = axios.create({
-  baseURL: `http://josehernan-001-site1.ltempurl.com`,
+  baseURL: `${protocol}//vizionizewebapi.somee.com/api/`,
   timeout: 0,
   responseType: 'json',
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
-  },
-  auth: {
-    username: '11171419',
-    password: '60-dayfreetrial',
   },
 });
 

@@ -8,7 +8,7 @@
   } from '@heroicons/vue/24/outline';
   import { onMounted, ref } from 'vue';
   import { useRouter } from 'vue-router';
-  const icons = [CubeIcon, UserGroupIcon, PlusCircleIcon, PencilSquareIcon, TrashIcon]; //Iconos en orden que se muestran en el sidebar
+  const icons = [CubeIcon, PlusCircleIcon, TrashIcon, PencilSquareIcon, UserGroupIcon]; //Iconos en orden que se muestran en el sidebar
   const router = useRouter();
   const selectedRouteIndex = ref(0);
   function goToRoute(route: string, index: number) {
