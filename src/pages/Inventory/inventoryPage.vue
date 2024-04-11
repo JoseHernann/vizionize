@@ -2,7 +2,7 @@
 
 <template>
   <div class="h-full w-full">
-    <div>kkkk</div>
+    <div>Pagina de inventario</div>
   </div>
 </template>
 

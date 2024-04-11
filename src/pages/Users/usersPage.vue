@@ -26,36 +26,38 @@
 </script>
 
 <template>
-  <div class="h-full w-full">
-    <DxDataGrid
-      :data-source="users"
-      key-expr="USER_ID"
-      :row-alternation-enabled="true"
-      :show-row-lines="true"
-    >
-      <DxColumn data-field="USER_ID" caption="USUARIO">
-        <DxRequiredRule />
-        <DxPatternRule
-          :pattern="onlyUpperCaseAndNumbersandDash"
-          message="Debe ser en mayusculas y solo puede contener numeros y guiones"
-        />
-      </DxColumn>
-      <DxColumn data-field="FIRST_NAME" caption="NOMBRE">
-        <DxPatternRule
-          :pattern="onlyUpperCase"
-          message='Debe ser en mayusculas. Ejemplo: "JUAN CARLOS"'
-      /></DxColumn>
-      <DxColumn data-field="LAST_NAME" caption="APELLIDOS"
+  <div class="h-full w-full  ">
+    <div class="px-10">
+      <DxDataGrid
+          :data-source="users"
+          key-expr="USER_ID"
+          :row-alternation-enabled="true"
+          :show-row-lines="true"
+      >
+        <DxColumn data-field="USER_ID" caption="USUARIO">
+          <DxRequiredRule />
+          <DxPatternRule
+              :pattern="onlyUpperCaseAndNumbersandDash"
+              message="Debe ser en mayusculas y solo puede contener numeros y guiones"
+          />
+        </DxColumn>
+        <DxColumn data-field="FIRST_NAME" caption="NOMBRE">
+          <DxPatternRule
+              :pattern="onlyUpperCase"
+              message='Debe ser en mayusculas. Ejemplo: "JUAN CARLOS"'
+          /></DxColumn>
+        <DxColumn data-field="LAST_NAME" caption="APELLIDOS"
         ><DxPatternRule
-          :pattern="onlyUpperCase"
-          message='Debe ser en mayusculas. Ejemplo: "PEREZ GARCIA"'
+            :pattern="onlyUpperCase"
+            message='Debe ser en mayusculas. Ejemplo: "PEREZ GARCIA"'
         />
-      </DxColumn>
-      <DxColumn data-field="ROL" caption="ROL" />
-      <DxPaging :enabled="true" />
-      <DxEditing :allow-deleting="true" :allow-updating="true" :allow-adding="true" mode="popup">
-        <DxPopup :show-title="true" :width="700" :height="425" title="Editar Usuario"
-      /></DxEditing>
-    </DxDataGrid>
+        </DxColumn>
+        <DxColumn data-field="ROL" caption="ROL" />
+        <DxPaging :enabled="true" />
+        <DxEditing :allow-deleting="true" :allow-updating="true" :allow-adding="true" mode="popup">
+          <DxPopup  :width="700" :height="350"
+          /></DxEditing>
+      </DxDataGrid>
+    </div>
   </div>
 </template>
