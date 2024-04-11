@@ -16,6 +16,14 @@ const router = createRouter({
             authorizedRoles: ['Administrador'],
           },
         },
+        {
+          path: '/identificar-productos',
+          name: 'Identificar Articulo',
+          component: () => import('../pages/Articulos/identifyProduct.vue'),
+          meta: {
+            authorizedRoles: ['Administrador'],
+          },
+        },
 
         {
           path: '/agregar-productos',
