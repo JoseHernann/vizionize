@@ -2,7 +2,6 @@
   import { ref } from 'vue';
   import { DxFileUploader } from 'devextreme-vue/file-uploader';
   import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/vue/24/outline';
-  import VInput from '../../components/VInput.vue';
   const tab = ref(1);
 
   const isDropZoneActive = ref(false);

@@ -11,6 +11,6 @@ type JsonRequestOptions = {
 type paramValues = {
   name: string;
   type: string;
-  value: string;
+  value: string | number;
 };
 export default JsonRequestOptions;

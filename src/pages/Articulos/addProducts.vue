@@ -1,49 +1,46 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { DxFileUploader } from 'devextreme-vue/file-uploader';
-  import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+  import { onMounted, ref } from 'vue';
   const tab = ref(1);
+  import { DxLookup } from 'devextreme-vue/lookup';
+  import JsonRequestOptions from '../../entities/jsonRequest.ts';
+  import getDinamicData from '../../services/requestFunction.ts';
+  import DropZone from '../../components/dropZone.vue';
+  import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
+  const suppliersData = ref([]);
+  const categorysData = ref([]);
 
-  const isDropZoneActive = ref(false);
-  const imageSource = ref('');
-  const textVisible = ref(true);
-  const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
-
-  function onDropZoneEnter(e :any ) {
-    if (e.dropZoneElement.id === 'dropzone-external') {
-      isDropZoneActive.value = true;
-    }
-  }
-  function onDropZoneLeave(e : any) {
-    if (e.dropZoneElement.id === 'dropzone-external') {
-      isDropZoneActive.value = false;
-    }
-  }
-  function onUploaded({ file } : any) {
-    const fileReader = new FileReader();
-
-    fileReader.onload = () => {
-      isDropZoneActive.value = false;
-      imageSource.value = fileReader.result as string;
-      console.log(fileReader.result as string);
+  async function getSuppliers() {
+    const catalogOptions: JsonRequestOptions = {
+      encryptedSP: 'X_XpW/ylNbYw4XEFGm0gXGrGw==',
+      paramValues: [
+        {
+          name: 'Type',
+          value: 1,
+          type: 'int',
+        },
+      ],
     };
-
-    fileReader.readAsDataURL(file);
-    textVisible.value = false;
+    suppliersData.value = await getDinamicData(catalogOptions);
   }
 
-  function onUploadStarted() {
-    imageSource.value = '';
+  async function getCategorys() {
+    const catalogOptions: JsonRequestOptions = {
+      encryptedSP: 'X_XpW/ylNbYw4XEFGm0gXGrGw==',
+      paramValues: [
+        {
+          name: 'Type',
+          value: 2,
+          type: 'int',
+        },
+      ],
+    };
+    categorysData.value = await getDinamicData(catalogOptions);
   }
 
-  function deleteImage() {
-    imageSource.value = '';
-    textVisible.value = true;
-  }
-
-  function searchImage() {
-    // aqui se puede hacer un handy y si no funciona la API de Azure usar la BD para buscarlo
-  }
+  onMounted(async () => {
+    await getSuppliers();
+    await getCategorys();
+  });
 </script>
 
 <template>
@@ -70,54 +67,88 @@
         </button>
       </div>
     </div>
-    <div v-if="tab == 2"></div>
-    <div v-if="tab == 1" class="w-full">
-      <div class="flex items-center justify-center w-full h-full p-20">
-        <div
-          id="dropzone-external"
-          class="p-20 flex flex-col items-center justify-center w-full h-[35rem] border-2 border-primary border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-silver-50"
-        >
-          <XMarkIcon
-            class="w-6 h-6 bg-primary stroke-white rounded-full self-end"
-            v-if="imageSource"
-            @click="deleteImage"
-          />
-          <img id="dropzone-image" :src="imageSource" v-if="imageSource" alt="" />
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <CloudArrowUpIcon
-              class="w-8 h-8 mb-4 text-primary dark:text-gray-400"
-              id="dropzone-image"
-              v-if="!imageSource"
+    <div v-if="tab == 2">
+      <div class="h-96">
+        <DropZone :show-search="false" />
+      </div>
+      <div class="flex flex-col p-14 gap-5">
+        <div class="grid grid-cols-3 gap-5">
+          <label
+            class="col-start-1 col-end-3 block overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <span class="text-md font-medium text-silver-700"> Nombre del producto </span>
+            <input
+              type="text"
+              class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
             />
+          </label>
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <InboxStackIcon class="w-6 h-6 stroke-primary" />
+            <span>
+              <span class="text-md font-medium text-silver-700"> Cantidad (Stock) </span>
+              <input
+                type="number"
+                class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+              />
+            </span>
+          </label>
+        </div>
+        <div class="flex w-full gap-5">
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <CurrencyDollarIcon class="w-7 h-7 stroke-primary" />
+            <span class="w-full">
+              <span class="text-md font-medium text-silver-700"> Precio unitario </span>
+              <input
+                type="number"
+                class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+              />
+            </span>
+          </label>
 
-            <p class="mb-2 text-sm text-primary" id="dropzone-text" v-if="textVisible">
-              <span class="font-semibold">Click para Subir</span> o arrastra y suelta tu archivo
-            </p>
-            <p class="text-xs text-primary" id="dropzone-text" v-if="textVisible">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
-            </p>
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <CurrencyDollarIcon class="w-7 h-7 stroke-primary" />
+            <span class="w-full">
+              <span class="text-md font-medium text-silver-700"> Precio Venta </span>
+              <input
+                type="number"
+                class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+              />
+            </span>
+          </label>
+        </div>
+        <div class="flex gap-5">
+          <div class="flex flex-col w-full gap-3">
+            <label class="text-silver-400"> Proveedor </label>
+            <DxLookup
+              :items="suppliersData"
+              placeholder="Selecciona un proveedor..."
+              display-expr="NOMBRE"
+              class="w-full"
+            />
+          </div>
+          <div class="flex flex-col w-full gap-3">
+            <label class="text-silver-400">Categoria</label>
+            <DxLookup
+              :items="categorysData"
+              placeholder="Selecciona una categoria..."
+              display-expr="CATEGORIA"
+              class="w-full"
+            />
           </div>
         </div>
+        <div class="flex w-full justify-center mt-14">
+          <button class="bg-clear px-20 text-white py-3 rounded-xl -mt-10">Guardar</button>
+        </div>
       </div>
-      <DxFileUploader
-        id="file-uploader"
-        dialog-trigger="#dropzone-external"
-        drop-zone="#dropzone-external"
-        :multiple="false"
-        :allowed-file-extensions="allowedFileExtensions"
-        upload-mode="instantly"
-        upload-url="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
-        :visible="false"
-        @drop-zone-enter="onDropZoneEnter"
-        @drop-zone-leave="onDropZoneLeave"
-        @uploaded="onUploaded"
-        @upload-started="onUploadStarted"
-      />
-      <div class="w-full justify-center flex">
-        <button class="bg-primary px-20 text-white py-3 rounded-xl -mt-10" @click="searchImage">
-          Buscar
-        </button>
-      </div>
+    </div>
+    <div v-if="tab == 1" class="w-full">
+      <DropZone :show-search="true" />
     </div>
   </div>
 </template>
