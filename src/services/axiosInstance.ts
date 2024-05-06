@@ -6,7 +6,6 @@ const instance = axios.create({
   responseType: 'json',
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
-
   },
 });
 

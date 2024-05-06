@@ -4,8 +4,9 @@
   import { DxLookup } from 'devextreme-vue/lookup';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
-  import DropZone from '../../components/dropZone.vue';
   import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
+  import DropZoneInput from "../../components/dropZoneInput.vue";
+  import DropZoneDevexpress from "../../components/dropZoneDevexpress.vue";
   const suppliersData = ref([]);
   const categorysData = ref([]);
 
@@ -22,7 +23,6 @@
     };
     suppliersData.value = await getDinamicData(catalogOptions);
   }
-
   async function getCategorys() {
     const catalogOptions: JsonRequestOptions = {
       encryptedSP: 'X_XpW/ylNbYw4XEFGm0gXGrGw==',
@@ -41,6 +41,10 @@
     await getSuppliers();
     await getCategorys();
   });
+
+
+
+
 </script>
 
 <template>
@@ -69,7 +73,7 @@
     </div>
     <div v-if="tab == 2">
       <div class="h-96">
-        <DropZone :show-search="false" />
+        <DropZoneDevexpress :show-search="false" />
       </div>
       <div class="flex flex-col p-14 gap-5">
         <div class="grid grid-cols-3 gap-5">
@@ -148,7 +152,7 @@
       </div>
     </div>
     <div v-if="tab == 1" class="w-full">
-      <DropZone :show-search="true" />
+      <DropZoneInput />
     </div>
   </div>
 </template>

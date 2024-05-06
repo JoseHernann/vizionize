@@ -9,15 +9,15 @@ async function getDinamicData(requestOptions: JsonRequestOptions) {
     dataString,
     User,
     Pass,
-    encryptedConnection = 'X_X3ypK/d6yBFmsjtdhBmONhA==',
+    encryptedConnection = 'X_X3ypK/d6yBFmsjtdhBmONhA==', //Vizionize
   } = requestOptions;
 
   const response = await instance.post('DinamicData/GetDinamicData', {
     process,
     dataString,
-    encryptedSP,
+    encryptedSP, //
     encryptedConnection,
-    paramValues,
+    paramValues, //
     User,
     Pass,
   });

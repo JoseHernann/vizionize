@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts"> // VUE JS 3
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
   import { onMounted, ref } from 'vue';
@@ -11,18 +11,24 @@
     DxPatternRule,
     DxPopup,
   } from 'devextreme-vue/data-grid';
-  const users = ref();
+
+
+  const  users = ref();
   const onlyUpperCaseAndNumbersandDash = /^[A-Z0-9\-]+$/;
   const onlyUpperCase = /^[A-Z\s]+$/;
+
+
   async function getData() {
     const UsersInformation: JsonRequestOptions = {
       encryptedSP: 'X_XiWWe/Nqvp64V4dm4lhm5gA==',
     };
     users.value = await getDinamicData(UsersInformation);
   }
+
   onMounted(() => {
     getData();
   });
+
 </script>
 
 <template>
@@ -61,3 +67,5 @@
     </div>
   </div>
 </template>
+
+
