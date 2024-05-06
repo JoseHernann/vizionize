@@ -5,3 +5,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.alertRounded {
+    border-radius: 30px;
+}
