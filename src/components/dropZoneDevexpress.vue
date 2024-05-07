@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { CloudArrowUpIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
   import { DxFileUploader } from 'devextreme-vue/file-uploader';
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
 
   const isDropZoneActive = ref(false);
   const imageSource = ref('');
   const textVisible = ref(true);
   const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+  const props = defineProps(['showSearch']);
+  const emit = defineEmits(['imageSourceDev']);
 
   function onDropZoneEnter(e: any) {
     if (e.dropZoneElement.id === 'dropzone-external') {
@@ -36,11 +38,10 @@
     imageSource.value = '';
     textVisible.value = true;
   }
-  function searchImage() {
-    // aqui se puede hacer un handy y si no funciona la API de Azure usar la BD para buscarlo
-  }
 
-  const props = defineProps(['showSearch']);
+  watch(imageSource, (newVal) => {
+    emit('imageSourceDev', newVal);
+  });
 </script>
 
 <template>
@@ -48,24 +49,22 @@
     <div class="w-full justify-center flex gap-10">
       <button
         class="bg-primary px-16 text-white py-3 rounded-xl -mt-10 flex justify-around gap-2 disabled:cursor-not-allowed"
-        @click="searchImage"
         v-if="props.showSearch == true"
       >
         <MagnifyingGlassIcon class="w-4 h-4 stroke-white" /> Buscar
       </button>
-      <button
-        class="bg-primary px-20 text-white py-3 rounded-xl -mt-10"
-        v-if="imageSource"
-        @click="deleteImage"
-      >
-        Eliminar imagen
-      </button>
     </div>
     <div
       id="dropzone-external"
-      class="p-20 flex flex-col items-center justify-center w-full h-[35rem] border-2 border-primary border-dashed rounded-lg cursor-pointer bg-silver-50 hover:bg-silver-50"
+      class="p-20 flex flex-col items-center justify-center w-full h-[35rem] border-2 border-primary border-dashed rounded-lg cursor-pointer hover:bg-silver-50"
     >
-      <img id="dropzone-image" :src="imageSource" v-if="imageSource" alt="" />
+      <img
+        id="dropzone-image"
+        :src="imageSource"
+        v-if="imageSource"
+        alt=""
+        class="max-w-32 max-h-32"
+      />
       <div class="flex flex-col items-center justify-center pt-5 pb-6">
         <CloudArrowUpIcon
           class="w-8 h-8 mb-4 text-primary dark:text-silver-400"
@@ -81,6 +80,13 @@
         </p>
       </div>
     </div>
+    <button
+      class="bg-primary px-20 text-white py-3 rounded-xl -mt-3"
+      v-if="imageSource"
+      @click="deleteImage"
+    >
+      Eliminar imagen
+    </button>
   </div>
 
   <DxFileUploader

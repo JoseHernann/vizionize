@@ -1,44 +1,60 @@
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { DxFileUploader } from 'devextreme-vue/file-uploader';
-  import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+  import { DxLookup } from 'devextreme-vue/lookup';
+  import JsonRequestOptions from '../../entities/jsonRequest.ts';
+  import getDinamicData from '../../services/requestFunction.ts';
+  import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
+  import DropZoneInput from '../../components/dropZoneInput.vue';
+  import itemEspecification from '../../entities/itemEspecification.ts';
+
   const tab = ref(1);
 
-  const isDropZoneActive = ref(false);
-  const imageSource = ref('');
-  const textVisible = ref(true);
-  const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+  const suppliersData = ref([]);
+  const categorysData = ref([]);
+  const productAlreadyDetected = ref(false);
 
-  function onDropZoneEnter(e) {
-    if (e.dropZoneElement.id === 'dropzone-external') {
-      isDropZoneActive.value = true;
-    }
-  }
-  function onDropZoneLeave(e) {
-    if (e.dropZoneElement.id === 'dropzone-external') {
-      isDropZoneActive.value = false;
-    }
-  }
-  function onUploaded({ file }) {
-    const fileReader = new FileReader();
+  const product = ref<itemEspecification>({
+    name: '',
+    stock: 0,
+    precioVent: 0,
+    precioUnit: 0,
+    category: 0,
+    proveedor: 0,
+    image: '',
+  });
 
-    fileReader.onload = () => {
-      isDropZoneActive.value = false;
-      imageSource.value = fileReader.result as string;
-      console.log(fileReader.result as string);
+  //TAB 1
+  function handleProductDetected(producto: string) {
+    product.value!.name = producto;
+    productAlreadyDetected.value = true;
+  }
+  function handleImageSource(imageSourceRecived: string) {
+    product.value!.image = imageSourceRecived;
+  }
+
+  async function searchProduct() {
+    const productOptions: JsonRequestOptions = {
+      encryptedSP: 'X_XvA3yAqJX6tXej8yTbZEASbqiA0eC/j2e', //SP_SEARCH_PRODUCT
+      paramValues: [
+        {
+          name: 'Nombre',
+          value: product.value!.name,
+          type: 'varchar',
+        },
+      ],
     };
-
-    fileReader.readAsDataURL(file);
-    textVisible.value = false;
+    product.value = await getDinamicData(productOptions);
   }
 
-  function onUploadStarted() {
-    imageSource.value = '';
-  }
-
-  function deleteImage() {
-    imageSource.value = '';
-    textVisible.value = true;
+  function cancelOperation() {
+    productAlreadyDetected.value = false;
+    product.value.name = '';
+    product.value.stock = 0;
+    product.value.precioUnit = 0;
+    product.value.precioVent = 0;
+    product.value.image = '';
+    product.value.proveedor = 0;
+    product.value.category = 0;
   }
 </script>
 
@@ -66,70 +82,111 @@
         </button>
       </div>
     </div>
-    <div v-if="tab == 2">
-      <fieldset class="w-full space-y-1 text-gray-300 px-32 mt-16">
-        <label for="Search" class="hidden">Search</label>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-            <button type="button" title="search" class="p-1 focus:outline-none focus:ring">
-              <svg fill="currentColor" viewBox="0 0 512 512" class="w-4 h-4 text-gray-800">
-                <path
-                  d="M479.6,399.716l-81.084-81.084-62.368-25.767A175.014,175.014,0,0,0,368,192c0-97.047-78.953-176-176-176S16,94.953,16,192,94.953,368,192,368a175.034,175.034,0,0,0,101.619-32.377l25.7,62.2L400.4,478.911a56,56,0,1,0,79.2-79.195ZM48,192c0-79.4,64.6-144,144-144s144,64.6,144,144S271.4,336,192,336,48,271.4,48,192ZM456.971,456.284a24.028,24.028,0,0,1-33.942,0l-76.572-76.572-23.894-57.835L380.4,345.771l76.573,76.572A24.028,24.028,0,0,1,456.971,456.284Z"
-                ></path>
-              </svg>
-            </button>
-          </span>
-          <input
-            type="search"
-            name="Search"
-            placeholder="Search..."
-            class="w-full py-2 pl-10 text-sm rounded-md focus:outline-none bg-gray-100 text-gray-800 focus:bg-gray-50 focus:border-violet-600 border border-gray-100"
-          />
-        </div>
-      </fieldset>
-    </div>
     <div v-if="tab == 1" class="w-full">
-      <div class="flex items-center justify-center w-full h-full p-20">
-        <div
-          id="dropzone-external"
-          class="p-20 py-56 flex flex-col items-center justify-center w-full h-full border-2 border-primary border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-silver-50"
-        >
-          <XMarkIcon
-            class="w-6 h-6 bg-primary stroke-white rounded-full self-end"
-            v-if="imageSource"
-            @click="deleteImage"
-          />
-          <img id="dropzone-image" :src="imageSource" v-if="imageSource" alt="" />
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <CloudArrowUpIcon
-              class="w-8 h-8 mb-4 text-primary dark:text-gray-400"
-              id="dropzone-image"
-              v-if="!imageSource"
+      <DropZoneInput
+        @productDetected="handleProductDetected"
+        v-if="!productAlreadyDetected"
+        @imageSource="handleImageSource"
+      />
+      <div class="flex flex-col p-14 gap-20" v-else>
+        <div class="grid grid-cols-3 gap-5">
+          <label
+            class="col-start-1 col-end-3 block overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <span class="text-md font-medium text-silver-700"> Nombre del producto </span>
+            <input
+              type="text"
+              v-model="product!.name"
+              disabled
+              class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 text-xl"
             />
+          </label>
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <InboxStackIcon class="w-6 h-6 stroke-primary" />
+            <span>
+              <span class="text-md font-medium text-silver-700"> Cantidad (Stock) </span>
+              <input
+                type="number"
+                v-model="product.stock"
+                class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 text-xl"
+              />
+            </span>
+          </label>
+        </div>
+        <div class="flex w-full gap-5">
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <CurrencyDollarIcon class="w-7 h-7 stroke-primary" />
+            <span class="w-full">
+              <span class="text-md font-medium text-silver-700"> Precio unitario </span>
 
-            <p class="mb-2 text-sm text-primary" id="dropzone-text" v-if="textVisible">
-              <span class="font-semibold">Click para Subir</span> o arrastra y suelta tu archivo
-            </p>
-            <p class="text-xs text-primary" id="dropzone-text" v-if="textVisible">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
-            </p>
+              <span class="flex items-center mt-2 text-2xl">
+                <span class="text-silver-300 mr-3">$</span>
+                <input
+                  type="number"
+                  v-model="product.precioUnit"
+                  class="w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 text-xl"
+                />
+                <span class="text-silver-300">MXN</span>
+              </span>
+            </span>
+          </label>
+
+          <label
+            class="w-full flex items-center gap-5 overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+          >
+            <CurrencyDollarIcon class="w-7 h-7 stroke-primary" />
+            <span class="w-full">
+              <span class="text-md font-medium text-silver-700"> Precio Venta </span>
+              <span class="flex items-center mt-2 text-2xl">
+                <span class="text-silver-300 mr-3">$</span>
+                <input
+                  type="number"
+                  v-model="product.precioVent"
+                  class="w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 text-xl"
+                />
+                <span class="text-silver-300">MXN</span>
+              </span>
+            </span>
+          </label>
+        </div>
+        <div class="flex gap-5">
+          <div class="flex flex-col w-full gap-3">
+            <label class="text-silver-400"> Proveedor </label>
+            <DxLookup
+              :items="suppliersData"
+              placeholder="Selecciona un proveedor..."
+              display-expr="NOMBRE"
+              class="w-full"
+              v-model="product.proveedor"
+            />
+          </div>
+          <div class="flex flex-col w-full gap-3">
+            <label class="text-silver-400">Categoria</label>
+            <DxLookup
+              :items="categorysData"
+              placeholder="Selecciona una categoria..."
+              display-expr="CATEGORIA"
+              v-model="product.category"
+              class="w-full"
+            />
           </div>
         </div>
+        <div class="flex w-full justify-center mt-14 gap-20">
+          <button
+            class="bg-silver-400 px-20 text-white py-5 rounded-xl -mt-10"
+            @click="cancelOperation"
+          >
+            Cancelar
+          </button>
+          <button class="bg-primary px-20 text-white py-5 rounded-xl -mt-10" @click="saveProduct">
+            Guardar
+          </button>
+        </div>
       </div>
-      <DxFileUploader
-        id="file-uploader"
-        dialog-trigger="#dropzone-external"
-        drop-zone="#dropzone-external"
-        :multiple="false"
-        :allowed-file-extensions="allowedFileExtensions"
-        upload-mode="instantly"
-        upload-url="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
-        :visible="false"
-        @drop-zone-enter="onDropZoneEnter"
-        @drop-zone-leave="onDropZoneLeave"
-        @uploaded="onUploaded"
-        @upload-started="onUploadStarted"
-      />
     </div>
   </div>
 </template>

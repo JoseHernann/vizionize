@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
+  import { onMounted, ref } from 'vue';
   const tab = ref(1);
   import { DxLookup } from 'devextreme-vue/lookup';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
   import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
-
+  import itemEspecification from '../../entities/itemEspecification.ts';
   import DropZoneInput from '../../components/dropZoneInput.vue';
   import DropZoneDevexpress from '../../components/dropZoneDevexpress.vue';
   import { showSmallErrorToast, showSmallSuccessToast } from '../../utils/alerts.ts';
@@ -24,16 +24,6 @@
     proveedor: 0,
     image: '',
   });
-
-  type itemEspecification = {
-    name: string;
-    stock: number;
-    precioUnit: number;
-    precioVent: number;
-    proveedor: number;
-    category: number;
-    image: string;
-  };
 
   //TAB 1
   function handleProductDetected(producto: string) {
@@ -285,7 +275,7 @@
     </div>
     <div v-if="tab == 2">
       <div class="h-96">
-        <DropZoneDevexpress :show-search="false" />
+        <DropZoneDevexpress :show-search="false" @imageSourceDev="handleImageSource" />
       </div>
       <div class="flex flex-col p-14 gap-5">
         <div class="grid grid-cols-3 gap-5">
@@ -295,6 +285,7 @@
             <span class="text-md font-medium text-silver-700"> Nombre del producto </span>
             <input
               type="text"
+              v-model="product!.name"
               class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
             />
           </label>
@@ -306,6 +297,7 @@
               <span class="text-md font-medium text-silver-700"> Cantidad (Stock) </span>
               <input
                 type="number"
+                v-model="product.stock"
                 class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
               />
             </span>
@@ -320,6 +312,7 @@
               <span class="text-md font-medium text-silver-700"> Precio unitario </span>
               <input
                 type="number"
+                v-model="product.precioUnit"
                 class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
               />
             </span>
@@ -333,6 +326,7 @@
               <span class="text-md font-medium text-silver-700"> Precio Venta </span>
               <input
                 type="number"
+                v-model="product.precioVent"
                 class="mt-3 w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
               />
             </span>
@@ -345,6 +339,7 @@
               :items="suppliersData"
               placeholder="Selecciona un proveedor..."
               display-expr="NOMBRE"
+              v-model="product.proveedor"
               class="w-full"
             />
           </div>
@@ -354,13 +349,21 @@
               :items="categorysData"
               placeholder="Selecciona una categoria..."
               display-expr="CATEGORIA"
+              v-model="product.category"
               class="w-full"
             />
           </div>
         </div>
-        <div class="flex w-full justify-center mt-14">
-          <button class="bg-primary px-20 text-white py-3 rounded-xl -mt-10">Guardar</button>
-          <button class="bg-silver-200 px-20 text-white py-3 rounded-xl -mt-10">Cancelar</button>
+        <div class="flex w-full justify-center mt-14 gap-10">
+          <button class="bg-primary px-20 text-white py-3 rounded-xl -mt-10" @click="saveProduct">
+            Guardar
+          </button>
+          <button
+            class="bg-silver-200 px-20 text-white py-3 rounded-xl -mt-10"
+            @click="cancelOperation"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
