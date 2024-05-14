@@ -18,7 +18,7 @@
     </div>
     <div
       id="dropzone-external"
-      class="p-20 flex flex-col items-center justify-center w-full h-[30rem] border-2 border-primary border-dashed rounded-lg cursor-pointer bg-white transition-colors hover:bg-silver-50"
+      class="p-20 flex flex-col items-center justify-center w-full h-[21rem] border-2 border-primary border-dashed rounded-lg cursor-pointer bg-white transition-colors hover:bg-silver-50"
       @dragover.prevent
       @dragenter.prevent
       @dragleave.prevent
@@ -31,7 +31,7 @@
         :src="imageSource"
         v-if="imageSource"
         alt=""
-        class="max-h-96 max-w-96"
+        class="max-h-72 max-w-72"
       />
 
       <div class="flex flex-col items-center justify-center pt-5 pb-6">

@@ -173,7 +173,7 @@
         v-if="!productAlreadyDetected"
         @imageSource="handleImageSource"
       />
-      <div class="flex flex-col p-14 gap-20" v-else>
+      <div class="flex flex-col p-14 gap-10" v-else>
         <div class="grid grid-cols-3 gap-5">
           <label
             class="col-start-1 col-end-3 block overflow-hidden rounded-md border border-silver-200 px-3 py-2 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
