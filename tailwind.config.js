@@ -10,7 +10,7 @@ export default {
       clear: '#898DE8F0',
       auxiliar: '#F4F6FF',
       white: '#ffffff',
-
+      red: '#d50000',
       silver: {
         50: 'rgba(247,247,247,0.85)',
         100: '#F4F4F5',
