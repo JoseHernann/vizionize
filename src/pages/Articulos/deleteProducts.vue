@@ -10,8 +10,6 @@
   import { showSmallSuccessToast } from '../../utils/alerts.ts';
   const tab = ref(1);
 
-  const suppliersData = ref([]);
-  const categorysData = ref([]);
   const productAlreadyDetected = ref(false);
   const searchResults = ref([]);
   const product = ref<itemEspecification>({
@@ -25,10 +23,7 @@
   });
   const searchedProduct = ref(false);
   const productId = ref();
-  onMounted(async () => {
-    await getSuppliers();
-    await getCategorys();
-  });
+
 
   //TAB 1
   async function handleProductDetected(producto: string) {
@@ -87,6 +82,7 @@
 
   function cancelOperation() {
     productAlreadyDetected.value = false;
+    searchedProduct.value = false;
     product.value.name = '';
     product.value.stock = 0;
     product.value.precioUnit = 0;
@@ -147,7 +143,7 @@
         @imageSource="handleImageSource"
       />
       <div class="flex flex-col p-14 gap-20" v-else>
-        <div class="flex flex-col p-14 gap-10" v-show="searchedProduct">
+        <div class="flex flex-col p-14 gap-10" v-show="productAlreadyDetected">
           <div class="grid grid-cols-3 gap-5">
             <div class="flex gap-32 items-center col-start-1 col-end-3 mb-10">
               <img

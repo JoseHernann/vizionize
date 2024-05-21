@@ -12,6 +12,7 @@
   import itemEspecification from '../../entities/itemEspecification.ts';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
+  import {showSmallErrorToast} from "../../utils/alerts.ts";
   const tab = ref(1);
 
   const productAlreadyDetected = ref(false);
@@ -50,6 +51,11 @@
       ],
     };
     searchResults.value = await getDinamicData(productOptions);
+    if(searchResults.value.length == 0){
+      cancelOperation()
+      await showSmallErrorToast('Producto no encontrado');
+      return;
+    }
     searchedProduct.value = true;
     productId.value = searchResults.value[0].ID;
     product.value.name = searchResults.value[0].PRODUCT_NAME;
@@ -58,6 +64,7 @@
     product.value.precioVent = searchResults.value[0].PRECIO_VENTA;
     product.value.image = searchResults.value[0].IMAGEN;
   }
+
   watch(
     () => product.value.name,
     async (newVal) => {
