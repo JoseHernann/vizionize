@@ -19,7 +19,7 @@
 
   async function getData() {
     const UsersInformation: JsonRequestOptions = {
-      encryptedSP: 'X_XiWWe/Nqvp64V4dm4lhm5gA==',
+      encryptedSP: 'X_XiWWe/Nqvp64rIyNq8A+Bj9+3IAaeuSOf',
     };
     users.value = await getDinamicData(UsersInformation);
   }
@@ -34,7 +34,7 @@
     <div class="px-10">
       <DxDataGrid
         :data-source="users"
-        key-expr="USER_ID"
+        key-expr="ID_PROVEEDOR"
         :row-alternation-enabled="true"
         :allow-column-reordering="true"
         :allow-column-resizing="true"
@@ -44,25 +44,26 @@
         :group-panel="{ visible: true }"
         :show-row-lines="true"
       >
-        <DxColumn data-field="USER_ID" caption="USUARIO">
+        <DxColumn data-field="ID_PROVEEDOR" caption="IDENTIFICADOR">
           <DxRequiredRule />
           <DxPatternRule
             :pattern="onlyUpperCaseAndNumbersandDash"
             message="Debe ser en mayusculas y solo puede contener numeros y guiones"
           />
         </DxColumn>
-        <DxColumn data-field="FIRST_NAME" caption="NOMBRE">
+        <DxColumn data-field="NOMBRE" caption="NOMBRE">
           <DxPatternRule
             :pattern="onlyUpperCase"
             message='Debe ser en mayusculas. Ejemplo: "JUAN CARLOS"'
         /></DxColumn>
-        <DxColumn data-field="LAST_NAME" caption="APELLIDOS"
+        <DxColumn data-field="CONTACTO" caption="# CONTACTO"
           ><DxPatternRule
             :pattern="onlyUpperCase"
             message='Debe ser en mayusculas. Ejemplo: "PEREZ GARCIA"'
           />
         </DxColumn>
-        <DxColumn data-field="ROL" caption="ROL" />
+        <DxColumn data-field="DIRECCION" caption="DIRECCION" />
+        <DxColumn data-field="CREATED_AT" caption="FECHA DE ADICION" />
         <DxPaging :enabled="true" />
         <DxEditing :allow-deleting="true" :allow-updating="true" :allow-adding="true" mode="popup">
           <DxPopup :width="700" :height="350"

@@ -1,18 +1,11 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
-  import { DxFileUploader } from 'devextreme-vue/file-uploader';
-  import {
-    CloudArrowUpIcon,
-    CurrencyDollarIcon,
-    InboxStackIcon,
-    TrashIcon,
-    XMarkIcon,
-  } from '@heroicons/vue/24/outline';
+  import { ref, watch } from 'vue';
+  import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
   import DropZoneInput from '../../components/dropZoneInput.vue';
   import itemEspecification from '../../entities/itemEspecification.ts';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
-  import {showSmallErrorToast} from "../../utils/alerts.ts";
+  import { showSmallErrorToast } from '../../utils/alerts.ts';
   const tab = ref(1);
 
   const productAlreadyDetected = ref(false);
@@ -51,8 +44,8 @@
       ],
     };
     searchResults.value = await getDinamicData(productOptions);
-    if(searchResults.value.length == 0){
-      cancelOperation()
+    if (searchResults.value.length == 0) {
+      cancelOperation();
       await showSmallErrorToast('Producto no encontrado');
       return;
     }

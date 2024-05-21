@@ -4,6 +4,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
+      path: '/login',
+      name: 'Login',
+      component: () => import('../pages/Authentification/login.vue'),
+    },
+    {
       path: '/',
       name: 'userLayout',
       component: () => import('../layout/layout.vue'), // Lazy load route component,
@@ -41,18 +46,26 @@ const router = createRouter({
             authorizedRoles: ['Administrador'],
           },
         },
-        {
+        /*{
           path: '/editar-productos',
           name: 'Editar Articulo',
           component: () => import('../pages/Articulos/editProducts.vue'),
           meta: {
             authorizedRoles: ['Administrador'],
           },
-        },
+        },*/
         {
           path: '/usuarios',
           name: 'Usuarios',
           component: () => import('../pages/Users/usersPage.vue'), // Lazy load route component,
+          meta: {
+            authorizedRoles: ['Administrador'],
+          },
+        },
+        {
+          path: '/proveedores',
+          name: 'Proveedores',
+          component: () => import('../pages/Users/suppliersPage.vue'), // Lazy load route component,
           meta: {
             authorizedRoles: ['Administrador'],
           },
