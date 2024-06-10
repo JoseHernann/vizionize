@@ -5,7 +5,6 @@
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
   import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
-  import itemEspecification from '../../entities/itemEspecification.ts';
   import DropZoneInput from '../../components/dropZoneInput.vue';
   import DropZoneDevexpress from '../../components/dropZoneDevexpress.vue';
   import { showSmallErrorToast, showSmallSuccessToast } from '../../utils/alerts.ts';
@@ -15,7 +14,7 @@
 
   const productAlreadyDetected = ref(false);
 
-  const product = ref<itemEspecification>({
+  const product = ref<any>({
     name: '',
     stock: 0,
     precioVent: 0,

@@ -9,17 +9,17 @@
   const textVisible = ref(true);
   const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
-  function onDropZoneEnter(e) {
+  function onDropZoneEnter(e: any) {
     if (e.dropZoneElement.id === 'dropzone-external') {
       isDropZoneActive.value = true;
     }
   }
-  function onDropZoneLeave(e) {
+  function onDropZoneLeave(e: any) {
     if (e.dropZoneElement.id === 'dropzone-external') {
       isDropZoneActive.value = false;
     }
   }
-  function onUploaded({ file }) {
+  function onUploaded({ file  } : any) {
     const fileReader = new FileReader();
 
     fileReader.onload = () => {

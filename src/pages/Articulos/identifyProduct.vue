@@ -2,15 +2,24 @@
   import { ref, watch } from 'vue';
   import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
   import DropZoneInput from '../../components/dropZoneInput.vue';
-  import itemEspecification from '../../entities/itemEspecification.ts';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
   import { showSmallErrorToast } from '../../utils/alerts.ts';
+  import productSelected from "../../entities/productSelected.ts";
   const tab = ref(1);
-
-  const productAlreadyDetected = ref(false);
-  const searchResults = ref([]);
-  const product = ref<itemEspecification>({
+  const searchResults = ref<Array<productSelected>>([
+    {
+      ID: 0,
+      PRODUCT_NAME: '',
+      CANTIDAD:0,
+      PRECIO_UNITARIO:0,
+      PRECIO_VENTA:0,
+      IMAGEN:'',
+      ID_PROVEEDOR:0,
+      ID_CATEGORIA:0
+    }
+  ]);
+  const product = ref<any>({
     name: '',
     stock: 0,
     precioVent: 0,
@@ -19,6 +28,8 @@
     proveedor: 0,
     image: '',
   });
+  const productAlreadyDetected = ref(false);
+
   const searchedProduct = ref(false);
   const productId = ref();
 

@@ -1,18 +1,28 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
-  import { DxLookup } from 'devextreme-vue/lookup';
+  import { ref, watch } from 'vue';
   import JsonRequestOptions from '../../entities/jsonRequest.ts';
   import getDinamicData from '../../services/requestFunction.ts';
   import { CurrencyDollarIcon, InboxStackIcon } from '@heroicons/vue/24/outline';
   import DropZoneInput from '../../components/dropZoneInput.vue';
-  import itemEspecification from '../../entities/itemEspecification.ts';
+  import productSelected from "../../entities/productSelected.ts";
   import { MagnifyingGlassIcon, TrashIcon } from '@heroicons/vue/24/outline';
   import { showSmallSuccessToast } from '../../utils/alerts.ts';
   const tab = ref(1);
 
   const productAlreadyDetected = ref(false);
-  const searchResults = ref([]);
-  const product = ref<itemEspecification>({
+  const searchResults = ref<Array<productSelected>>([
+    {
+      ID: 0,
+      PRODUCT_NAME: '',
+      CANTIDAD:0,
+      PRECIO_UNITARIO:0,
+      PRECIO_VENTA:0,
+      IMAGEN:'',
+      ID_PROVEEDOR:0,
+      ID_CATEGORIA:0
+    }
+  ]);
+  const product = ref<any>({
     name: '',
     stock: 0,
     precioVent: 0,
@@ -47,7 +57,7 @@
       ],
     };
     searchResults.value = await getDinamicData(productOptions);
-    console.log(searchResults);
+
     productId.value = searchResults.value[0].ID;
     product.value.name = searchResults.value[0].PRODUCT_NAME;
     product.value.stock = searchResults.value[0].CANTIDAD;
@@ -68,7 +78,7 @@
 
   // const productSaved = await getDinamicData(productOptions);
 
-  function loadProductInfo(productSelected: Array<any>) {
+  function loadProductInfo(productSelected: productSelected) {
     searchedProduct.value = true;
     productId.value = productSelected.ID;
     product.value.name = productSelected.PRODUCT_NAME;
